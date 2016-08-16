@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe User, :type => :model do
-  it "can create user" do
+  it "should be create" do
     user = User.create(
       email: 'user@mail.com',
       name: 'test',
@@ -15,7 +15,7 @@ RSpec.describe User, :type => :model do
     expect(User.all.length).to eq(1)
   end
 
-  it "cannot create user if password and password_confirmation not the same" do
+  it "shouldn't be create if password and password_confirmation are not the same" do
     user = User.create(
       email: 'user@mail.com',
       name: 'test',
@@ -25,7 +25,7 @@ RSpec.describe User, :type => :model do
     expect(User.all.length).to eq(0)
   end
 
-  it "cannot create user if name is empty or null" do
+  it "shouldn't be create if name is empty or null" do
     user1 = User.create(
       email: 'user1@mail.com',
       name: '',

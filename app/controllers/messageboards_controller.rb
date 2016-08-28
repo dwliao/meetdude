@@ -7,6 +7,10 @@ class MessageboardsController < ApplicationController
     @messageboard = Messageboard.all
   end
 
+  def edit
+    @messageboard = Messageboard.find(params[:id])
+  end
+
   def create
     @messageboard = Messageboard.new(messageboard_params)
 
@@ -14,6 +18,16 @@ class MessageboardsController < ApplicationController
       redirect_to_messageboards_path
     else
       render :new
+    end
+  end
+
+  def update
+    @messageboard = Messageboard.find(params[:id])
+
+    if @messageboard.update(messageboard_params)
+      redirect_to messageboards_path
+    else
+      render :edit
     end
   end
 

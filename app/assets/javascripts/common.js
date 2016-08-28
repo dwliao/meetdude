@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).on("turbolinks:load", function () {
   $("#searchNameText").keyup(function() {
     $.ajax({
       url: "/searchUserByName",
@@ -11,8 +11,9 @@ $(document).ready(function() {
         $("#searchNameList").empty()
         if (data.users) {
           data.users.forEach(function(user) {
-            var item = $("<div></div>");
-            item.addClass("item");
+            var item = $("<a></a>");
+            item.addClass("list-group-item");
+            item.attr("href", "/" + user.name);
             item.append(user.name);
             $("#searchNameList").append(item);
           })

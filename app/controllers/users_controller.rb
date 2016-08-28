@@ -16,6 +16,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    if params[:name] && User.find_by(name: params[:name])
+      @user = User.find_by(name: params[:name])
+    else
+      render :file => "#{Rails.root}/public/404.html", :status => 404
+    end
+  end
+
   private
 
   def user_params

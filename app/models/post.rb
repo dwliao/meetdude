@@ -1,4 +1,4 @@
-class Messageboard < ActiveRecord::Base
+class Post < ActiveRecord::Base
   validates :title, presence: true
 
   def self.no_description

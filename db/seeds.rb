@@ -11,7 +11,7 @@ puts "這個種子檔會自動建立30個帳號"
 30.times do
   User.create(
     email: Faker::Internet.email,
-    name: Faker::Company.name,
+    name: Faker::Name.name,
     password: 123456,
     password_confirmation: 123456
   )

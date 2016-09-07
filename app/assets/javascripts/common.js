@@ -13,7 +13,7 @@ $(document).on("turbolinks:load", function () {
           data.users.forEach(function(user) {
             var item = $("<a></a>");
             item.addClass("list-group-item");
-            item.attr("href", "/" + user.name);
+            item.attr("href", "/" + user.id);
             item.append(user.name);
             $("#searchNameList").append(item);
           })

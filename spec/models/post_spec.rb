@@ -1,16 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  #it "should be created" do
-  #  post = Post.create(
-  #  title: 'test',
-  #  description: 'test'
-  #  )
+  it "should be created" do
+    post = Post.create(
+      title: 'title',
+      description: 'description')
 
-  #  expect(Post.find_by(title: 'test')).to eq(post)
-  #  expect(Post.find_by(description: 'test')).to eq(post)
-  #  expect()
-  #end
+    expect(Post.find_by(title: 'title')).to eq(post)
+    expect(Post.find_by(description: 'description')).to eq(post)
+  end
 
   it "is accessible" do
     post = Post.create!(:title => "title")
@@ -37,5 +35,4 @@ RSpec.describe Post, type: :model do
     expect(Post.no_description).to include post_without_description
     expect(Post.no_description).not_to include post_with_description
   end
-
 end

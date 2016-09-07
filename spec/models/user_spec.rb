@@ -40,16 +40,17 @@ RSpec.describe User, :type => :model do
     expect(User.all.length).to eq(0)
   end
 
-  #it "has many_messageboard" do
-  #  messageboard = Messageboard.create(:title => "title", :description => "description")
-  #  user = User.create(
-  #  email: 'user.mail.com',
-  #  name: 'test',
-  #  password: '12345678',
-  #  password_confirmation: '12345678',
-  #  user_id: 'user_id'
-  #  )
-  #  expect(user.messageboards).to include(messageboard)
-  #end
+  it "can create post" do
+    user = User.create(
+      email: 'user@mail.com',
+      name: 'test',
+      password: '12345678',
+      password_confirmation: '12345678')
+    post = user.posts.create(
+      title: 'title',
+      description: 'description')
 
+    expect(user.posts).to include(post)
+    expect(post.user).to eq(user)
+  end
 end

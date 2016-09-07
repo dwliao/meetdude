@@ -1,1 +1,6 @@
-<p><%= @user.name %></p>
+<div id="main">
+  <div class="page-header">
+    <h3><%= @user.name %> <small><%= @user.email %></small></h3>
+  </div>
+  <%= render :partial => "common/post", :collection => @user.posts, :as => :post %>
+</div>

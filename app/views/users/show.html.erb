@@ -1,6 +1,22 @@
-<div id="main">
-  <div class="page-header">
-    <h3><%= @user.name %> <small><%= @user.email %></small></h3>
+<div id="userPage">
+  <div id="userHeader">
+    <image id="userHeaderImage" src="http://webmasterbank.files.wordpress.com/2012/02/bg-header-index.jpg">
+    <div id="userTabWrap">
+      <image id="userAvatar" src="http://rs794.pbsrc.com/albums/yy228/jade95_2010/PHOTOGRAPHY-VARIED/cat-face.jpg~c200">
+      <h3 id="userName"><%= @user.name %></h3>
+      <div id="userTabs">
+      </div>
+    </div>
   </div>
-  <%= render :partial => "common/post", :collection => @user.posts, :as => :post %>
+  <div id="userContent">
+    <div id="userInfo">
+    </div>
+    <div id="userPost">
+      <div id="newPostWrap">
+      </div>
+      <div id="posts">
+        <%= render :partial => "common/post", :collection => @user.posts, :as => :post %>
+      </div>
+    </div>
+  </div>
 </div>

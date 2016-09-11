@@ -1,11 +1,20 @@
-<div class="media">
-  <div class="media-left media-middle">
-    <%= link_to "/#{@user.id}" do %>
-      <strong class="media-object"><%= @user.name %></strong>
-    <% end %>
+<div class="postWrap">
+  <div class="postHeader">
+    <image class="postCreatorAvatar" src="https://www-01.ibm.com/software/sg/analytics/images/brandpages/icon-bi60x60.jpg">
+    <div class="postInfoWrap">
+      <div class="postAction">
+        <%= link_to "/#{post.user.id}" do %>
+          <strong><%= post.user.name %></strong>
+        <% end %>
+      </div>
+      <div class="postInfo">
+        <div class="postTime">
+          <%= time_ago_in_words(post.created_at) %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="media-body">
-    <h4 class="media-heading"><%= post.title %></h4>
+  <div class="postContent">
     <p><%= post.description %></p>
   </div>
 </div>

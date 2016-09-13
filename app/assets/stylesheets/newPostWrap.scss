@@ -1,0 +1,36 @@
+#newPostWrap #newPostHeader {
+  background-color: #f6f7f9;
+  height: 30px;
+}
+
+#newPostWrap #newPostContent {
+  position: relative;
+  padding: 10px
+}
+
+#newPostWrap #newPostContent #newPostCreatorAvatar {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 60px;
+  height: 60px;
+}
+
+#newPostWrap #newPostContent #newPostText {
+  position: relative;
+  left: 70px;
+  width: calc(100% - 70px);
+  resize: none;
+  border: none;
+  padding: 0px;
+  overflow: hidden;
+}
+
+#newPostWrap #newPostContent #newPostText:focus {
+  //outline: none;
+}
+
+#newPostWrap #newPostFooter {
+  background-color: #f6f7f9;
+  height: 30px;
+}

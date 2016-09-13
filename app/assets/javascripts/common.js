@@ -24,4 +24,7 @@ $(document).on("turbolinks:load", function () {
       }
     });
   });
+  $("#newPostText").keyup(function() {
+    $(this).height(60);
+  });
 });

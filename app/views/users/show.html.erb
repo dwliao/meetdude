@@ -12,10 +12,9 @@
     <div id="userInfo">
     </div>
     <div id="userPost">
-      <div id="newPostWrap">
-      </div>
+      <%= render "common/newPostWrap" %>
       <div id="posts">
-        <%= render :partial => "common/post", :collection => @user.posts, :as => :post %>
+        <%= render :partial => "common/postWrap", :collection => @user.posts, :as => :post %>
       </div>
     </div>
   </div>

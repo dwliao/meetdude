@@ -1,128 +1,126 @@
 body {
   background-color: #e9ebee !important;
-  padding: 50px;
+  padding-top: 50px;
+  min-width: 768px;
+  margin: 0;
 }
 
-#mainNavbar {
-  background-color: #3b5998 !important;
-}
-
-#mainNavbar .navbar-brand {
-  color: #fff;
-}
-
-#mainNavbar ul.nav > li > a {
-  color: #fff;
-}
-
-#searchNameWrap {
-  position: relative;
-  top: 10px;
-  height: 30px;
-}
-
-#searchNameWrap #searchNameText {
-  height: 30px;
-}
-
-#userPage {
-  width: 80%;
-  margin-left: 10%;
-}
-
-#userPage #userHeader {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-#userPage #userHeader #userHeaderImage {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-#userPage #userHeader #userTabWrap {
-  position: relative;
-  height: 40px;
-  background-color: #fff;
-}
-
-#userPage #userHeader #userTabWrap #userAvatar {
-  display:inline-block;
-  position: absolute;
-  top: -130px;
-  left: 10px;
-  width: 160px;
-  height: 160px;
-  border-style: solid;
-  border-width: 5px;
-  border-color: white;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, .3);
-}
-
-#userPage #userHeader #userTabWrap #userName {
-  display:inline-block;
-  position: absolute;
-  top: -50px;
-  left: 180px;
-  height: 40px;
-  color: #fff;
-}
-
-#userPage #userHeader #userTabWrap #userTabs {
-  display:inline-block;
-  position: absolute;
-  left: 180px;
-  height: 40px;
-}
-
-#userPage #userContent {
-  position: relative;
-}
-
-#userPage #userContent #userInfo {
-  position: absolute;
-  width: 30%;
-}
-
-#userPage #userContent #userPost {
-  position: absolute;
-  left: 30%;
-  width: 70%;
-}
-
-.postWrap {
+.pageContentBox {
   background-color: #fff;
   margin-top: 10px;
   margin-bottom: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 5px;
-  padding: 10px;
 }
 
-.postWrap .postHeader {
+// searchNameWrap
+#searchNameWrap {
   position: relative;
-}
-
-.postWrap .postHeader .postCreatorAvatar {
-  width: 60px;
-  height: 60px;
-}
-
-.postWrap .postHeader .postInfoWrap {
-  position: absolute;
-  top: 0px;
-  left: 60px;
-  padding-left: 5px;
-  width: calc(100% - 60px);
-}
-
-.postWrap .postHeader .postInfoWrap .postAction {
+  top: 10px;
   height: 30px;
+  #searchNameText {
+    height: 30px;
+  }
 }
 
-.postWrap .postHeader .postInfoWrap .postInfo {
-  height: 30px;
+// mainNavbar
+$bgDefault      : #3b5998;
+$bgHighlight    : #3b5998;
+$colDefault     : #e3e3e3;
+$colHighlight   : #ffffff;
+$dropDown       : false;
+#mainNavbar.navbar-default {
+  background-color: $bgDefault;
+  border-color: $bgHighlight;
+  .navbar-brand {
+    color: $colHighlight;
+    &:hover, &:focus {
+      color: $colHighlight;
+    }
+  }
+  .navbar-text {
+    color: $colDefault;
+  }
+  .navbar-nav {
+    > li {
+      > a {
+        color: $colDefault;
+        &:hover, &:focus {
+          color: $colHighlight;
+        }
+      }
+      @if $dropDown {
+        > .dropdown-menu {
+          background-color: $bgDefault;
+          > li {
+            > a {
+              color: $colDefault;
+              &:hover, &:focus {
+                color: $colHighlight;
+                background-color: $bgHighlight;
+              }
+            }
+            > .divider {
+              background-color: $bgHighlight;
+            }
+          }
+        }
+      }
+    }
+    @if $dropDown {
+      .open .dropdown-menu > .active {
+        > a, > a:hover, > a:focus {
+          color: $colHighlight;
+          background-color: $bgHighlight;
+        }
+      }
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+  }
+  .navbar-toggle {
+    border-color: $bgHighlight;
+    &:hover, &:focus {
+      background-color: $bgHighlight;
+    }
+    .icon-bar {
+      background-color: $colDefault;
+    }
+  }
+  .navbar-collapse,
+  .navbar-form {
+    border-color: $colDefault;
+  }
+  .navbar-link {
+    color: $colDefault;
+    &:hover {
+      color: $colHighlight;
+    }
+  }
 }
-
-.postWrap .postContent {
-  padding-top: 5px;
+@media (max-width: 767px) {
+  #mainNavbar.navbar-default .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $colDefault;
+      &:hover, &:focus {
+        color: $colHighlight;
+      }
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+  }
 }

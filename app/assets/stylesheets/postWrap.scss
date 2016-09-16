@@ -1,0 +1,32 @@
+$postCreatorAvatarWidth: 60px;
+$postCreatorAvatarHeight: 60px;
+$postInfoWrapPaddingLeft: 5px;
+$postActionHeight: 30px;
+$postInfoHeight: 30px;
+$postContentPaddingTop: 5px;
+.postWrap {
+  padding: 10px;
+  .postHeader {
+    position: relative;
+    .postCreatorAvatar {
+      width: $postCreatorAvatarWidth;
+      height: $postCreatorAvatarHeight;
+    }
+    .postInfoWrap {
+      position: absolute;
+      top: 0px;
+      left: $postCreatorAvatarWidth;
+      padding-left: $postInfoWrapPaddingLeft;
+      width: calc(100% - $postCreatorAvatarWidth);
+      .postAction {
+        height: $postActionHeight;
+      }
+      .postInfo {
+        height: $postInfoHeight;
+      }
+    }
+  }
+  .postContent {
+    padding-top: $postContentPaddingTop;
+  }
+}

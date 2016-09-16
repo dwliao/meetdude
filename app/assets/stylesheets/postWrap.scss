@@ -1,32 +1,32 @@
+$postCreatorAvatarWidth: 60px;
+$postCreatorAvatarHeight: 60px;
+$postInfoWrapPaddingLeft: 5px;
+$postActionHeight: 30px;
+$postInfoHeight: 30px;
+$postContentPaddingTop: 5px;
 .postWrap {
   padding: 10px;
-}
-
-.postWrap .postHeader {
-  position: relative;
-}
-
-.postWrap .postHeader .postCreatorAvatar {
-  width: 60px;
-  height: 60px;
-}
-
-.postWrap .postHeader .postInfoWrap {
-  position: absolute;
-  top: 0px;
-  left: 60px;
-  padding-left: 5px;
-  width: calc(100% - 60px);
-}
-
-.postWrap .postHeader .postInfoWrap .postAction {
-  height: 30px;
-}
-
-.postWrap .postHeader .postInfoWrap .postInfo {
-  height: 30px;
-}
-
-.postWrap .postContent {
-  padding-top: 5px;
+  .postHeader {
+    position: relative;
+    .postCreatorAvatar {
+      width: $postCreatorAvatarWidth;
+      height: $postCreatorAvatarHeight;
+    }
+    .postInfoWrap {
+      position: absolute;
+      top: 0px;
+      left: $postCreatorAvatarWidth;
+      padding-left: $postInfoWrapPaddingLeft;
+      width: calc(100% - $postCreatorAvatarWidth);
+      .postAction {
+        height: $postActionHeight;
+      }
+      .postInfo {
+        height: $postInfoHeight;
+      }
+    }
+  }
+  .postContent {
+    padding-top: $postContentPaddingTop;
+  }
 }

@@ -1,36 +1,46 @@
-#newPostWrap #newPostHeader {
-  background-color: #f6f7f9;
-  height: 30px;
-}
-
-#newPostWrap #newPostContent {
-  position: relative;
-  padding: 10px
-}
-
-#newPostWrap #newPostContent #newPostCreatorAvatar {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 60px;
-  height: 60px;
-}
-
-#newPostWrap #newPostContent #newPostText {
-  position: relative;
-  left: 70px;
-  width: calc(100% - 70px);
-  resize: none;
-  border: none;
-  padding: 0px;
-  overflow: hidden;
-}
-
-#newPostWrap #newPostContent #newPostText:focus {
-  //outline: none;
-}
-
-#newPostWrap #newPostFooter {
-  background-color: #f6f7f9;
-  height: 30px;
+$newPostHeaderBackgroundColor: #f6f7f9;
+$newPostHeaderHeight: 30px;
+$newPostContentPadding: 10px;
+$newPostCreatorAvatarWidth: 60px;
+$newPostCreatorAvatarHeight: 60px;
+$newPostFooterBackgroundColor: #f6f7f9;
+$newPostFooterHeight: 30px;
+$newPostFooterPadding: 5px;
+$newPostSendButtonWidth: 70px;
+#newPostWrap {
+  #newPostHeader {
+    background-color: $newPostHeaderBackgroundColor;
+    height: $newPostHeaderHeight;
+  }
+  #newPostContent {
+    position: relative;
+    padding: $newPostContentPadding;
+    #newPostCreatorAvatar {
+      position: absolute;
+      left: $newPostContentPadding;
+      top: $newPostContentPadding;
+      width: $newPostCreatorAvatarWidth;
+      height: $newPostCreatorAvatarHeight;
+    }
+    #newPostText {
+      position: relative;
+      left: $newPostContentPadding + $newPostCreatorAvatarWidth;
+      width: calc(100% - $newPostContentPadding - $newPostCreatorAvatarWidth);
+      min-height: $newPostCreatorAvatarHeight;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  #newPostFooter {
+    background-color: $newPostFooterBackgroundColor;
+    height: $newPostFooterHeight;
+    padding: $newPostFooterPadding;
+    #newPostSendButton {
+      position: absolute;
+      width: $newPostSendButtonWidth;
+      height: $newPostFooterHeight - 2 * $newPostFooterPadding;
+      right: $newPostFooterPadding;
+    }
+  }
 }

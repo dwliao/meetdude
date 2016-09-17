@@ -6,8 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-user_number = 10
-posts_number_per_user = 10
+user_number = 5
+posts_number_per_user = 50
 
 puts "Create #{user_number} users and #{posts_number_per_user} posts for each user"
 
@@ -24,8 +24,12 @@ user_number.times do
     password: 123456,
     password_confirmation: 123456)
   posts_number_per_user.times do
+    date = Faker::Time.between(DateTime.now - 7, DateTime.now - 1)
     user.posts.create(
       title: Faker::Hipster.sentence,
-      description: Faker::Hipster.paragraph)
+      description: Faker::Hipster.paragraph,
+      target_id: Random.new.rand(user_number + 1) + 1,
+      created_at: date,
+      updated_at: date)
   end
 end

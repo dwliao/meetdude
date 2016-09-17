@@ -12,9 +12,10 @@
     <div id="userInfo">
     </div>
     <div id="userPost">
-      <%= render "common/newPostWrap" %>
-      <div id="posts">
-        <%= render :partial => "common/postWrap", :collection => @user.posts, :as => :post %>
+      <% if current_user %>
+        <%= render "common/newPostWrap", user: current_user, target: @user %>
+      <% end %>
+      <div id="posts" data-target-id="<%= @user.id %>">
       </div>
     </div>
   </div>

@@ -17,7 +17,7 @@ $postContentPaddingTop: 5px;
       top: 0px;
       left: $postCreatorAvatarWidth;
       padding-left: $postInfoWrapPaddingLeft;
-      width: calc(100% - $postCreatorAvatarWidth);
+      width: calc(100% - #{$postCreatorAvatarWidth});
       .postAction {
         height: $postActionHeight;
       }

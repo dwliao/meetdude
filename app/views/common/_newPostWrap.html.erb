@@ -1,9 +1,13 @@
-<div id="newPostWrap" class="pageContentBox">
+<div id="newPostWrap" class="pageContentBox" data-user-id="<%= user.id %>" data-target-id="<%= target.id %>">
   <div id="newPostHeader">
   </div>
   <div id="newPostContent">
     <image id="newPostCreatorAvatar" src="https://www-01.ibm.com/software/sg/analytics/images/brandpages/icon-bi60x60.jpg">
-    <div id="newPostText" contentEditable="true"></div>
+    <% if (user.id == target.id) %>
+      <textarea id="newPostText" placeholder="Say something?"></textarea>
+    <% else %>
+      <textarea id="newPostText" placeholder="Say something to <%= target.name %>?"></textarea>
+    <% end %>
   </div>
   <div id="newPostFooter">
     <button type="button" id="newPostSendButton" class="btn btn-primary btn-xs">Send</button>

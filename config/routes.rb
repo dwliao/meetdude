@@ -5,8 +5,10 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
-  post 'searchUserByName' => 'users#index'
   get ':id' => 'users#show'
+  post 'searchUsers' => 'users#search_users'
+  post 'appendPostsByTargetId' => 'posts#append_posts_by_target_id'
+  post 'createPost' => 'posts#create'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

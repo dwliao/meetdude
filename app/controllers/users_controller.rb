@@ -1,17 +1,11 @@
 class UsersController < ApplicationController
-  def index
-    if params[:name]
-      if !params[:name].empty?
-        @users = User.where("name LIKE ?", "%#{params[:name]}%")
-      else
-        @users = []
-      end
+  def search_users
+    if params[:name] && !params[:name].empty?
+      @users = User.where("name LIKE ?", "%#{params[:name]}%")
     else
-      @users = User.all
+      @users = []
     end
-
     respond_to do |format|
-      format.html
       format.json { render json: { :users => @users }}
     end
   end

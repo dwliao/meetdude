@@ -24,11 +24,6 @@ RSpec.describe Post, type: :model do
     # expect(columns).not_to include("") 反面寫法
   end
 
-  it "validates title" do
-    expect(Post.new).not_to be_valid
-    expect(Post.new(:title => "title")).to be_valid
-  end
-
   it ".no_description" do
     post_with_description = Post.create(:title => "title", :description => "description")
     post_without_description = Post.create(:title => "title", :description => nil)

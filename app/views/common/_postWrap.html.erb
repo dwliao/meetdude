@@ -1,4 +1,4 @@
-<div class="postWrap pageContentBox">
+<div class="postWrap pageContentBox" data-post-time="<%= post.updated_at.to_i %>">
   <div class="postHeader">
     <image class="postCreatorAvatar" src="https://www-01.ibm.com/software/sg/analytics/images/brandpages/icon-bi60x60.jpg">
     <div class="postInfoWrap">
@@ -6,15 +6,27 @@
         <%= link_to "/#{post.user.id}" do %>
           <strong><%= post.user.name %></strong>
         <% end %>
+        <% if (post.user.id != post.target.id) %>
+          <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+          <%= link_to "/#{post.target.id}" do %>
+            <strong><%= post.target.name %></strong>
+          <% end %>
+        <% end %>
       </div>
       <div class="postInfo">
         <div class="postTime">
-          <%= time_ago_in_words(post.created_at) %>
+          <% if post.created_at > Time.now.beginning_of_day %>
+              <%="#{time_ago_in_words(post.created_at)} ago"%>
+          <% else %>
+              <%= post.created_at.strftime("%I:%M %p %b %d, %Y") %>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
   <div class="postContent">
-    <p><%= post.description %></p>
+    <% post.description.split(/\r?\n/).each do |p| %>
+      <p><%= p %></p>
+    <% end %>
   </div>
 </div>

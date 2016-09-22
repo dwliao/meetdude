@@ -13,6 +13,7 @@ class PostsController < ApplicationController
         time = Time.at(last_post_time.to_i)
         @posts = Post
           .includes(:user)
+          .includes(:target)
           .where(['target_id = :id and updated_at > :time', { id: target_id, time: time }])
           .order(updated_at: :desc)
       # Get some old posts
@@ -20,6 +21,7 @@ class PostsController < ApplicationController
         time = Time.at(first_post_time.to_i)
         @posts = Post
           .includes(:user)
+          .includes(:target)
           .where(['target_id = :id and updated_at < :time', { id: target_id, time: time }])
           .order(updated_at: :desc)
           .limit(append_number)
@@ -27,6 +29,7 @@ class PostsController < ApplicationController
       else
         @posts = Post
           .includes(:user)
+          .includes(:target)
           .where(target_id: target_id)
           .order(updated_at: :desc)
           .limit(append_number)

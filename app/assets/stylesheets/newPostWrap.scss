@@ -29,7 +29,7 @@ $newPostSendButtonWidth: 70px;
       min-height: $newPostCreatorAvatarHeight;
       resize: none;
       overflow: hidden;
-      //border: none;
+      border: none;
       &:focus {
         outline: none;
       }

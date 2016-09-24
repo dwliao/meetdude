@@ -48,6 +48,10 @@ $dropDown       : false;
         &:hover, &:focus {
           color: $colHighlight;
         }
+        > .badge {
+          color: $bgDefault;
+          background-color: $colHighlight;
+        }
       }
       @if $dropDown {
         > .dropdown-menu {

@@ -3,7 +3,7 @@ $(document).on("turbolinks:load", function () {
   $("#searchNameText").keyup(onSearchNameTextKeyUp);
   $("#newPostText").keydown(auto_grow);
   $("#newPostText").keyup(auto_grow);
-  $("#newPostSendButton").click(onNewPostSendButtonClick)
+  $("#newPostSendButton").click(onClickNewPostSendButton)
 
   // Append posts
   if (!$(".postWrap").length)
@@ -49,7 +49,7 @@ function auto_grow(event) {
   event.target.style.height = (event.target.scrollHeight)+"px";
 }
 
-function onNewPostSendButtonClick(event) {
+function onClickNewPostSendButton(event) {
   if (!$("#newPostWrap") || !$("#newPostText"))
     return
   $.ajax({
@@ -57,33 +57,44 @@ function onNewPostSendButtonClick(event) {
     type: "POST",
     dataType: "json",
     data: {
-      user_id: $("#newPostWrap").attr("data-user-id"),
-      description: $("#newPostText").val(),
-      target_id: $("#newPostWrap").attr("data-target-id")
+      post: {
+        user_id: $("#newPostWrap").attr("data-user-id"),
+        description: $("#newPostText").val(),
+        target_id: $("#newPostWrap").attr("data-target-id")
+      }
     },
     complete: function(data, status) {
-      $("#newPostText").val("");
-      appendPostsByTargetId(true);
+      if (data.responseJSON.status == "success") {
+        $("#newPostText").val("");
+        appendPostsByTargetId(true);
+      }
     }
   });
 }
 
 /**
  * [appendPostsByTargetId description]
- * @param  {[bool]} direction    [true: append new posts, false: append old posts]
- * @param  {[int]}  appendNumber [append post number, only available when direction is false]
- * @return {[type]}              [description]
+ * @param  {[bool]} isForward   [true: append new posts, false: append old posts]
+ * @param  {[int]}  limitNumber [append post number, only available when isForward is false]
+ * @return {[type]}             [description]
  */
 var fireAppendPostsByTargetId = false;
-function appendPostsByTargetId(direction, appendNumber) {
+function appendPostsByTargetId(isForward, limitNumber) {
   if (!$("#posts") || !$("#posts").attr("data-target-id"))
     return;
-  var posts = $(".postWrap")
-  var data = {}
+  var data = {
+    user_id: $("#posts").attr("data-target-id"),
+    search_type: "TO",
+    start_search_time: undefined,
+    is_forward: false,
+    limit_number: 10,
+  }
 
+  var posts = $(".postWrap")
   if (posts.length) {
     var firstPost = undefined;
     var lastPost = undefined;
+    // Get firstPost and lastPost
     posts.each(function() {
       if (firstPost === undefined)
         firstPost = $(this)
@@ -95,27 +106,16 @@ function appendPostsByTargetId(direction, appendNumber) {
       else if (parseInt($(this).attr("data-post-time")) > parseInt(lastPost.attr("data-post-time")))
         lastPost = $(this)
     });
-    data = {
-      target_id: $("#posts").attr("data-target-id"),
-      first_post_time: firstPost.attr("data-post-time"),
-      last_post_time: lastPost.attr("data-post-time"),
-      isUpdate: direction,
-      append_number: !direction? appendNumber : undefined,
-    }
-  } else {
-    data = {
-      target_id: $("#posts").attr("data-target-id"),
-      first_post_time: undefined,
-      last_post_time: undefined,
-      isUpdate: false,
-      append_number: 10,
-    }
+
+    data.start_search_time = isForward? lastPost.attr("data-post-time") : firstPost.attr("data-post-time")
+    data.is_forward = isForward
+    data.limit_number = isForward? undefined : limitNumber
   }
 
   if (!fireAppendPostsByTargetId) {
     fireAppendPostsByTargetId = true;
     $.ajax({
-      url: "/appendPostsByTargetId",
+      url: "/appendPosts",
       type: "POST",
       dataType: "json",
       data: data,
@@ -123,13 +123,17 @@ function appendPostsByTargetId(direction, appendNumber) {
         fireAppendPostsByTargetId = false;
         if (data.responseText) {
           if (posts.length) {
-            if (direction)
+            if (isForward)
               lastPost.before(data.responseText);
             else
               firstPost.after(data.responseText);
           } else {
             $("#posts").append(data.responseText)
           }
+          // Bind edit and remove functions on posts
+          $(".postWrap").each(function() {
+            // Do something here
+          });
         }
       }
     });

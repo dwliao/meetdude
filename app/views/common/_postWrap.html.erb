@@ -1,4 +1,4 @@
-<div class="postWrap pageContentBox" data-post-time="<%= post.updated_at.to_i %>">
+<div class="postWrap pageContentBox" data-post-time="<%= post.updated_at.to_i %>" data-post-id="<%= post.id %>">
   <div class="postHeader">
     <image class="postCreatorAvatar" src="https://www-01.ibm.com/software/sg/analytics/images/brandpages/icon-bi60x60.jpg">
     <div class="postInfoWrap">
@@ -12,14 +12,33 @@
             <strong><%= post.target.name %></strong>
           <% end %>
         <% end %>
+        <% if (current_user) %>
+          <div class="postCaret dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <% if (current_user.id == post.user.id) %>
+                <li>
+                  <a href="#" class="editPostButton">
+                    編輯
+                  </a>
+                </li>
+              <% end %>
+              <% if (current_user.id == post.target.id) %>
+                <li>
+                  <a href="#" class="deletePostButton">
+                    移除
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
       </div>
       <div class="postInfo">
         <div class="postTime">
-          <% if post.created_at > Time.now.beginning_of_day %>
-              <%="#{time_ago_in_words(post.created_at)} ago"%>
-          <% else %>
-              <%= post.created_at.strftime("%I:%M %p %b %d, %Y") %>
-          <% end %>
+          <%= post.created_at.strftime("%I:%M %p %b %d, %Y") %>
         </div>
       </div>
     </div>

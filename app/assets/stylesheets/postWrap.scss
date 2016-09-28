@@ -20,6 +20,16 @@ $postContentPaddingTop: 5px;
       width: calc(100% - #{$postCreatorAvatarWidth});
       .postAction {
         height: $postActionHeight;
+        .postCaret {
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          .dropdown-menu {
+            left: auto;
+            right: 0px;
+            padding: 5px;
+          }
+        }
       }
       .postInfo {
         height: $postInfoHeight;

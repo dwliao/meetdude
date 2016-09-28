@@ -7,8 +7,11 @@ Rails.application.routes.draw do
   root 'pages#index'
   get ':id' => 'users#show'
   post 'searchUsers' => 'users#search_users'
-  post 'appendPostsByTargetId' => 'posts#append_posts_by_target_id'
+  post 'appendPosts' => 'posts#append_posts'
   post 'createPost' => 'posts#create'
+  get 'getPost' => 'posts#get'
+  put 'updatePost' => 'posts#update'
+  delete 'deletePost' => 'posts#destroy'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

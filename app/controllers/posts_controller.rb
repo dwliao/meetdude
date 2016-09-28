@@ -1,59 +1,95 @@
 class PostsController < ApplicationController
-  def append_posts_by_target_id
-    target_id = params[:target_id]
-    first_post_time = params[:first_post_time]
-    last_post_time = params[:last_post_time]
-    isUpdate = params[:isUpdate] === 'true'
-    append_number = params[:append_number] || 10
+  def append_posts
+    user_id = params[:user_id]
+    search_type = params[:search_type]
+    start_search_time = params[:start_search_time]
+    is_forward = params[:is_forward] == 'true'
+    limit_number = params[:limit_number]
 
     @posts = []
-    if target_id
-      # Get all new posts
-      if isUpdate && last_post_time
-        time = Time.at(last_post_time.to_i)
-        @posts = Post
-          .includes(:user)
-          .includes(:target)
-          .where(['target_id = :id and updated_at > :time', { id: target_id, time: time }])
-          .order(updated_at: :desc)
-      # Get some old posts
-      elsif !isUpdate && first_post_time
-        time = Time.at(first_post_time.to_i)
-        @posts = Post
-          .includes(:user)
-          .includes(:target)
-          .where(['target_id = :id and updated_at < :time', { id: target_id, time: time }])
-          .order(updated_at: :desc)
-          .limit(append_number)
-      # Get some newest posts
-      else
-        @posts = Post
-          .includes(:user)
-          .includes(:target)
-          .where(target_id: target_id)
-          .order(updated_at: :desc)
-          .limit(append_number)
+    if user_id
+      if search_type == 'TO'
+        if start_search_time
+          time = Time.at(start_search_time.to_i)
+          if is_forward # Get all new posts
+            @posts = Post
+              .includes(:user)
+              .includes(:target)
+              .where(['target_id = :id and updated_at > :time', { id: user_id, time: time }])
+              .order(updated_at: :desc)
+          else # Get some old posts
+            @posts = Post
+              .includes(:user)
+              .includes(:target)
+              .where(['target_id = :id and updated_at < :time', { id: user_id, time: time }])
+              .order(updated_at: :desc)
+              .limit(limit_number)
+          end
+        else # Get some newest posts
+          @posts = Post
+            .includes(:user)
+            .includes(:target)
+            .where(target_id: user_id)
+            .order(updated_at: :desc)
+            .limit(limit_number)
+        end
+      elsif search_type == 'FROM'
       end
     end
     render :partial => "common/postWrap", :collection => @posts, :as => :post, :content_type => "text/html"
   end
 
   def create
-    user_id = params[:user_id]
-    description = params[:description]
-    target_id = params[:target_id]
-
-    @post = Post.new(
-      user_id: user_id,
-      description: description,
-      target_id: target_id)
-
-    if @post.save
-      data = { post: @post }
+    post = Post.new(post_params)
+    if post.save
+      data = {
+        status: "success",
+        post: post
+      }
     else
-      data = { post: nil }
+      data = { status: "failed" }
     end
+    respond_to do |format|
+      format.json { render json: data }
+    end
+  end
 
+  def get
+    post = Post.find(params[:id])
+    if post
+      data = {
+        status: "success",
+        post: post
+      }
+    else
+      data = { status: "failed" }
+    end
+    respond_to do |format|
+      format.json { render json: data }
+    end
+  end
+
+  def update
+    post = Post.find(params[:id])
+    if post.update(post_params)
+      data = {
+        status: "success",
+        post: post
+      }
+    else
+      data = { status: "failed" }
+    end
+    respond_to do |format|
+      format.json { render json: data }
+    end
+  end
+
+  def destroy
+    post = Post.find(params[:id])
+    post.destroy
+    data = {
+      status: "success",
+    }
     respond_to do |format|
       format.json { render json: data }
     end

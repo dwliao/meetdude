@@ -50,6 +50,7 @@ function auto_grow(event) {
 }
 
 function onClickNewPostSendButton(event) {
+  event.preventDefault()
   if (!$("#newPostWrap") || !$("#newPostText"))
     return
   $.ajax({
@@ -132,10 +133,38 @@ function appendPostsByTargetId(isForward, limitNumber) {
           }
           // Bind edit and remove functions on posts
           $(".postWrap").each(function() {
-            // Do something here
+            var editPostButton = $(this).find("a.editPostButton")
+            if (editPostButton)
+              editPostButton.click(onClickEditPostButton)
+            var deletePostButton = $(this).find("a.deletePostButton")
+            if (deletePostButton)
+              deletePostButton.click(onClickDeletePostButton)
           });
         }
       }
     });
   }
+}
+
+function onClickEditPostButton(event) {
+  event.preventDefault()
+  // TODO: edit post
+}
+
+function onClickDeletePostButton(event) {
+  event.preventDefault()
+  var postWrap = $(this).parents("div.postWrap")
+  $.ajax({
+    url: "/deletePost",
+    type: "DELETE",
+    dataType: "json",
+    data: {
+      id: postWrap.attr("data-post-id")
+    },
+    complete: function(data, status) {
+      if (data.responseJSON.status == "success") {
+        postWrap.remove();
+      }
+    }
+  });
 }

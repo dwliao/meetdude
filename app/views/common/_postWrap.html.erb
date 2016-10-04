@@ -20,16 +20,12 @@
             <ul class="dropdown-menu">
               <% if (current_user.id == post.user.id) %>
                 <li>
-                  <a href="#" class="editPostButton">
-                    編輯
-                  </a>
+                  <a href="#" class="editPostButton">編輯</a>
                 </li>
               <% end %>
               <% if (current_user.id == post.target.id) %>
                 <li>
-                  <a href="#" class="deletePostButton">
-                    移除
-                  </a>
+                  <a href="#" class="deletePostButton">移除</a>
                 </li>
               <% end %>
             </ul>

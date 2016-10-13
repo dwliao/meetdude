@@ -47,10 +47,38 @@ RSpec.describe User, :type => :model do
       password: '12345678',
       password_confirmation: '12345678')
     post = user.posts.create(
-      title: 'title',
       description: 'description')
 
     expect(user.posts).to include(post)
     expect(post.user).to eq(user)
+  end
+
+  it "can post to others" do
+    user1 = User.create(
+      email: 'user1@mail.com',
+      name: 'test1',
+      password: '12345678',
+      password_confirmation: '12345678')
+    user2 = User.create(
+      email: 'user2@mail.com',
+      name: 'test2',
+      password: '12345678',
+      password_confirmation: '12345678')
+    post1 = user1.posts.create(
+      description: 'description1',
+      target_id: user2.id)
+    post2 = user2.posts.create(
+      description: 'description2',
+      target_id: user1.id)
+    post3 = user1.posts.create(
+      description: 'description3')
+
+    expect(user1.posts).to include(post1)
+    expect(post1.target).to eq(user2)
+    expect(post1.target).not_to eq(user1)
+    expect(post2.target).to eq(user1)
+    expect(post2.target).not_to eq(user2)
+    expect(post3.target).to eq(user1)
+    expect(post3.target).not_to eq(user2)
   end
 end

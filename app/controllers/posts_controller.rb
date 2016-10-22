@@ -16,13 +16,13 @@ class PostsController < ApplicationController
               .includes(:user)
               .includes(:target)
               .where(['target_id = :id and updated_at > :time', { id: user_id, time: time }])
-              .order(updated_at: :desc)
+              .recent
           else # Get some old posts
             @posts = Post
               .includes(:user)
               .includes(:target)
               .where(['target_id = :id and updated_at < :time', { id: user_id, time: time }])
-              .order(updated_at: :desc)
+              .recent
               .limit(limit_number)
           end
         else # Get some newest posts
@@ -30,7 +30,7 @@ class PostsController < ApplicationController
             .includes(:user)
             .includes(:target)
             .where(target_id: user_id)
-            .order(updated_at: :desc)
+            .recent
             .limit(limit_number)
         end
       elsif search_type == 'FROM'

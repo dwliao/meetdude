@@ -3,6 +3,9 @@ class Post < ActiveRecord::Base
   belongs_to :target, class_name: "User", foreign_key: "target_id"
   before_save :check_target_id!
 
+  scope :recent, -> { order(updated_at: :desc) }
+
+
   def self.no_description
     where(:description => nil)
   end

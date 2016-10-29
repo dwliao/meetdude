@@ -15,15 +15,13 @@ class PostsController < ApplicationController
             @posts = Post
               .includes(:user)
               .includes(:target)
-              .to_target(user_id)
-              .target_update(time)
+              .target_updated(user_id, time)
               .recent
           else # Get some old posts
             @posts = Post
               .includes(:user)
               .includes(:target)
-              .to_target(user_id)
-              .target_updated(time)
+              .where(['target_id = :id and updated_at < :time', { id: user_id, time: time }])
               .recent
               .limit(limit_number)
           end

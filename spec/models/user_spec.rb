@@ -74,6 +74,12 @@ RSpec.describe User, :type => :model do
       description: 'description3')
 
     expect(user1.posts).to include(post1)
+    expect(user2.target_posts).to include(post1)
+    expect(user2.target_posts).not_to include(post2)
+    expect(Post.where(target_id: user1.id).length).to eq(2)
+    expect(Post.where(target_id: user2.id).length).to eq(1)
+    expect(Post.where(user_id: user1.id).length).to eq(2)
+    expect(Post.where(user_id: user2.id).length).to eq(1)
     expect(post1.target).to eq(user2)
     expect(post1.target).not_to eq(user1)
     expect(post2.target).to eq(user1)

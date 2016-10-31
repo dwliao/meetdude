@@ -8,33 +8,39 @@ class PostsController < ApplicationController
 
     @posts = []
     if user_id
-      if search_type == 'TO'
-        if start_search_time
-          time = Time.at(start_search_time.to_i)
-          if is_forward # Get all new posts
-            @posts = Post
-              .includes(:user)
-              .includes(:target)
-              .target_updated(user_id, time)
-              .recent
-          else # Get some old posts
-            @posts = Post
-              .includes(:user)
-              .includes(:target)
-              .where(['target_id = :id and updated_at < :time', { id: user_id, time: time }])
-              .recent
-              .limit(limit_number)
-          end
-        else # Get some newest posts
-          @posts = Post
-            .includes(:user)
-            .includes(:target)
-            .where(target_id: user_id)
-            .recent
-            .limit(limit_number)
-        end
-      elsif search_type == 'FROM'
-      end
+      @post = Post
+      .includes(:user)
+      .includes(:target)
+      .which_related_to(user_id, search_type, start_search_time, is_forward, limit_number)
+
+
+      #if search_type == 'TO'
+      #  if start_search_time
+      #    time = Time.at(start_search_time.to_i)
+      #    if is_forward # Get all new posts
+      #      @posts = Post
+      #        .includes(:user)
+      #        .includes(:target)
+      #        .where(['target_id = :id and updated_at > :time', { id: user_id, time: time }])
+      #        .recent
+      #    else # Get some old posts
+      #      @posts = Post
+      #        .includes(:user)
+      #        .includes(:target)
+      #        .where(['target_id = :id and updated_at < :time', { id: user_id, time: time }])
+      #        .recent
+      #        .limit(limit_number)
+      #    end
+      #  else # Get some newest posts
+      #    @posts = Post
+      #      .includes(:user)
+      #      .includes(:target)
+      #      .where(target_id: user_id)
+      #      .recent
+      #      .limit(limit_number)
+      #  end
+      #elsif search_type == 'FROM'
+      #end
     end
     render :partial => "common/postWrap", :collection => @posts, :as => :post, :content_type => "text/html"
   end

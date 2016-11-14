@@ -5,25 +5,42 @@ class Post < ActiveRecord::Base
 
   scope :recent, -> { order(updated_at: :DESC) }
 
-  def self.which_related_to (user_id, search_type, start_search_time, is_forward, limit_number)
-    time = Time.at(start_search_time.to_i)
-    if search_type == 'To'
-      if start_search_time
-        if is_forward
-          where(['target_id = :id and updated_at > :time', { id: user_id, time: time }]).limit(limit_number).recent
+  def self.which_related_to(user_id, search_type, start_search_time, is_forward, limit_number)
+    time = start_search_time.nil? ? Time.now : Time.at(start_search_time.to_i)
+    if !user_id.nil? && !user_id.empty?
+      case search_type
+        when "TO"
+          if is_forward == "true"
+            if limit_number
+              where("target_id = ? and updated_at > ?", user_id, time).recent.limit(limit_number)
+            else
+              where("target_id = ? and updated_at > ?", user_id, time).recent
+            end
+          else
+            if limit_number
+              where("target_id = ? and updated_at < ?", user_id, time).recent.limit(limit_number)
+            else
+              where("target_id = ? and updated_at < ?", user_id, time).recent
+            end
+          end
+        when "FROM"
+          if is_forward == "true"
+            if limit_number
+              where("user_id = ? and updated_at > ?", user_id, time).recent.limit(limit_number)
+            else
+              where("user_id = ? and updated_at > ?", user_id, time).recent
+            end
+          else
+            if limit_number
+              where("user_id = ? and updated_at < ?", user_id, time).recent.limit(limit_number)
+            else
+              where("user_id = ? and updated_at < ?", user_id, time).recent
+            end
+          end
         else
-          where(['target_id = :id and updated_at <= :time', { id: user_id, time: time }]).limit(limit_number).recent
-        end
-      elsif search_type == 'From'
-        if is_forward
-          where(['user_id = :id and updated_at > :time', { id: user_id, time: time }]).limit(limit_number).recent
-        else
-          where(['user_id = :id and updated_at <= :time', { id: user_id, time: time }]).limit(limit_number).recent
-        end
       end
     end
   end
-
 
   def self.no_description
     where(:description => nil)

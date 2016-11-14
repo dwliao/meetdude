@@ -7,7 +7,7 @@ $(document).on("turbolinks:load", function () {
 
   // Append posts
   if (!$(".postWrap").length)
-    appendPostsByTargetId();
+    appendPostsByTargetId(false, 10);
 });
 
 function onScrollToBottom(event) {
@@ -87,8 +87,8 @@ function appendPostsByTargetId(isForward, limitNumber) {
     user_id: $("#posts").attr("data-target-id"),
     search_type: "TO",
     start_search_time: undefined,
-    is_forward: false,
-    limit_number: 10,
+    is_forward: isForward,
+    limit_number: limitNumber
   }
 
   var posts = $(".postWrap")
@@ -107,10 +107,9 @@ function appendPostsByTargetId(isForward, limitNumber) {
       else if (parseInt($(this).attr("data-post-time")) > parseInt(lastPost.attr("data-post-time")))
         lastPost = $(this)
     });
-
-    data.start_search_time = isForward? lastPost.attr("data-post-time") : firstPost.attr("data-post-time")
-    data.is_forward = isForward
-    data.limit_number = isForward? undefined : limitNumber
+    data.start_search_time = isForward ?
+      parseInt(lastPost.attr("data-post-time")) + 1 :
+      parseInt(firstPost.attr("data-post-time")) - 1
   }
 
   if (!fireAppendPostsByTargetId) {

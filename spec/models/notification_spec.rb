@@ -16,13 +16,6 @@ RSpec.describe Notification, type: :model do
 
   #before { sign_in(user1, scope: :user) }
 
-  describe "#notice_target can find the user who received notification " do
-    before { @notification1_2 = user1.notifications.create(:notice_target => user2) }
-
-    it { expect(@notification1_2.notice_target).to eq(user2) }
-    it { expect(@notification1_2.notice_target).not_to eq(user1) }
-    end
-
   describe "#post can find the user's post" do
     before { @notification1_2 = user1.notifications.create(:post => post1_2) }
     before { @notification2_1 = user2.notifications.create(:post => post2_1) }
@@ -50,5 +43,14 @@ RSpec.describe Notification, type: :model do
       expect(Notification.all.size).not_to eq(4)
       expect(Notification.all.size).not_to eq(0)
     end
+
+    it "should receive notification by who receive post" do
+      post1_2.save
+      post1.save
+      post2.save
+      expect(user2.notifications.length).to eq(1)
+      expect(user1.notifications.length).to eq(0)
+    end
   end
+
 end

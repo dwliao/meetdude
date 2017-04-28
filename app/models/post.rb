@@ -60,8 +60,8 @@ class Post < ActiveRecord::Base
 
   def generate_notification!
     return if self.target.id == self.user.id
-    Notification.create(user_id: self.user.id,
-                        target_id: self.target.id,
+    Notification.create(user_id: self.target.id,
+                        notified_by_id: self.user.id,
                         post_id: self.id,
                         notice_type: "receive_post")
   end

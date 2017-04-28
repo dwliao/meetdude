@@ -1,5 +1,54 @@
 require 'rails_helper'
 
 RSpec.describe Notification, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject(:user1) { User.create(email: Faker::Internet.email,
+                                name: Faker::Name.name,
+                                password: '123456',
+                                password_confirmation: '123456')}
+  subject(:user2) { User.create(email: Faker::Internet.email,
+                                name: Faker::Name.name,
+                                password: '12345678',
+                                password_confirmation: '12345678')}
+  subject(:post1_2) { user1.posts.new(description: "1", :target => user2) }
+  subject(:post2_1) { user2.posts.new(description: "2", :target => user1) }
+  subject(:post1)   { user1.posts.new(description: "2", :target => user1)}
+  subject(:post2)   { user2.posts.new(description: "3")}
+
+  #before { sign_in(user1, scope: :user) }
+
+  describe "#notice_target can find the user who received notification " do
+    before { @notification1_2 = user1.notifications.create(:notice_target => user2) }
+
+    it { expect(@notification1_2.notice_target).to eq(user2) }
+    it { expect(@notification1_2.notice_target).not_to eq(user1) }
+    end
+
+  describe "#post can find the user's post" do
+    before { @notification1_2 = user1.notifications.create(:post => post1_2) }
+    before { @notification2_1 = user2.notifications.create(:post => post2_1) }
+
+    it { expect(@notification1_2.post).to eq(post1_2) }
+    it { expect(@notification1_2.post).not_to eq(post2_1) }
+    it { expect(@notification2_1.post).to eq(post2_1) }
+    it { expect(@notification2_1.post).not_to eq(post1_2)}
+  end
+
+  context "When post save" do
+    it "not generate notification when post.user_id = post.target_id" do
+      post1.save
+      post2.save
+      expect( Notification.all.size ).to eq(0)
+      expect( Notification.all.size ).not_to eq(1)
+    end
+
+    it "generate notification when post.user_id != post.target_id" do
+      post1_2.save
+      post2_1.save
+      post1.save
+      post2.save
+      expect(Notification.all.size).to eq(2)
+      expect(Notification.all.size).not_to eq(4)
+      expect(Notification.all.size).not_to eq(0)
+    end
+  end
 end

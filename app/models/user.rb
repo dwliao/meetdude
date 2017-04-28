@@ -7,4 +7,6 @@ class User < ActiveRecord::Base
 
   has_many :posts, class_name: 'Post', foreign_key: 'user_id'
   has_many :target_posts, class_name: 'Post', foreign_key: 'target_id'
+
+  has_many :notifications, dependent: :destroy
 end

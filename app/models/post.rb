@@ -1,7 +1,11 @@
 class Post < ActiveRecord::Base
   belongs_to :user, class_name: "User", foreign_key: "user_id"
   belongs_to :target, class_name: "User", foreign_key: "target_id"
+
   before_save :check_target_id!
+  after_save :generate_notification!
+
+  has_many :notifications, dependent: :destroy
 
   scope :recent, -> { order(updated_at: :DESC) }
 
@@ -53,4 +57,13 @@ class Post < ActiveRecord::Base
       self.target_id = self.user_id
     end
   end
+
+  def generate_notification!
+    return if self.target.id == self.user.id
+    Notification.create(user_id: self.user.id,
+                        target_id: self.target.id,
+                        post_id: self.id,
+                        notice_type: "receive_post")
+  end
+
 end

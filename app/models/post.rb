@@ -3,6 +3,8 @@ class Post < ActiveRecord::Base
   belongs_to :target, class_name: "User", foreign_key: "target_id"
   before_save :check_target_id!
 
+  has_many :notifications, dependent: :destroy
+
   scope :recent, -> { order(updated_at: :DESC) }
 
   def self.which_related_to(user_id, search_type, start_search_time, is_forward, limit_number)

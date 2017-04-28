@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
+  #before { sign_in(user1, scope: :user) }
   it "should be created" do
     post = Post.create!(:title => "title",
                         :user_id => "11",

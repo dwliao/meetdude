@@ -17,13 +17,17 @@ RSpec.describe Notification, type: :model do
   #before { sign_in(user1, scope: :user) }
 
   describe "#post can find the user's post" do
-    before { @notification1_2 = user1.notifications.create(:post => post1_2) }
-    before { @notification2_1 = user2.notifications.create(:post => post2_1) }
+    before {post1_2.save}
+    before {post2_1.save}
+    before {post1.save}
+    before {post2.save}
+    let(:notification1_2) { Notification.find_by(post_id: post1_2.id) }
+    let(:notification2_1) { Notification.find_by(post_id: post2_1.id) }
 
-    it { expect(@notification1_2.post).to eq(post1_2) }
-    it { expect(@notification1_2.post).not_to eq(post2_1) }
-    it { expect(@notification2_1.post).to eq(post2_1) }
-    it { expect(@notification2_1.post).not_to eq(post1_2)}
+    it { expect(notification1_2.post).to eq(post1_2) }
+    it { expect(notification1_2.post).not_to eq(post2_1) }
+    it { expect(notification2_1.post).to eq(post2_1) }
+    it { expect(notification2_1.post).not_to eq(post1_2) }
   end
 
   context "When post save" do

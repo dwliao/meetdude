@@ -5,6 +5,11 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'pages#index'
+
+  get 'notifications' => 'notifications#index'
+  get 'notification/:id' => 'notifications#show'
+  post 'notification/:id/link_through' => 'notifications#link_through', as: :link_through
+
   get ':id' => 'users#show'
   post 'searchUsers' => 'users#search_users'
   post 'appendPosts' => 'posts#append_posts'
@@ -12,6 +17,8 @@ Rails.application.routes.draw do
   get 'getPost' => 'posts#get'
   put 'updatePost' => 'posts#update'
   delete 'deletePost' => 'posts#destroy'
+
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

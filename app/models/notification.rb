@@ -10,4 +10,8 @@ class Notification < ActiveRecord::Base
     is_read
   end
 
+  def have_read
+    self.update_columns(is_read: true)
+  end
+
 end

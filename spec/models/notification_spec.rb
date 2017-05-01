@@ -1,18 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Notification, type: :model do
-  subject(:user1) { User.create(email: Faker::Internet.email,
-                                name: Faker::Name.name,
-                                password: '123456',
-                                password_confirmation: '123456')}
-  subject(:user2) { User.create(email: Faker::Internet.email,
-                                name: Faker::Name.name,
-                                password: '12345678',
-                                password_confirmation: '12345678')}
+  subject(:user1) { create(:user) }
+  subject(:user2) { create(:user_two)}
   subject(:post1_2) { user1.posts.new(description: "1", :target => user2) }
   subject(:post2_1) { user2.posts.new(description: "2", :target => user1) }
-  subject(:post1)   { user1.posts.new(description: "2", :target => user1)}
-  subject(:post2)   { user2.posts.new(description: "3")}
+  subject(:post1)   { user1.posts.new(description: "2", :target => user1) }
+  subject(:post2)   { user2.posts.new(description: "3") }
 
   #before { sign_in(user1, scope: :user) }
 
@@ -54,6 +48,21 @@ RSpec.describe Notification, type: :model do
       post2.save
       expect(user2.notifications.length).to eq(1)
       expect(user1.notifications.length).to eq(0)
+    end
+  end
+
+  context "When notification is read" do
+    before {post2_1.save}
+    let(:notification2_1) { Notification.find_by(post_id: post2_1.id) }
+    it "#have_read will update is_read become true" do
+      notification2_1.have_read
+      expect(notification2_1.is_read) == true
+      expect(notification2_1.is_read) != false
+    end
+
+    it "#read? will show true or false" do
+      expect(notification2_1.read?) == false
+      expect(notification2_1.read?) != true
     end
   end
 

@@ -9,4 +9,15 @@ class User < ActiveRecord::Base
   has_many :target_posts, class_name: 'Post', foreign_key: 'target_id'
 
   has_many :notifications, dependent: :destroy
+
+  validates :auth_token, presence: true, uniqueness: true
+  before_validation :generate_authentication_token!
+
+  private
+
+  def generate_authentication_token!
+    begin
+      self.auth_token = Devise.friendly_token
+    end while self.class.exists?(auth_token: self.auth_token)
+  end
 end

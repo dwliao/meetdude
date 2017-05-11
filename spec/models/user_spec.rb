@@ -98,13 +98,13 @@ RSpec.describe User, :type => :model do
 
     it "generates a unique token" do
       allow(Devise).to receive(:friendly_token).and_return("uniquetoken")
-      @user.send(:generate_authentication_token!)
+      @user.generate_authentication_token!
       expect(@user.auth_token).to eq "uniquetoken"
     end
 
     it "generates another token when one already has been taken" do
       existing_user = FactoryGirl.create(:user, auth_token: "uniquetoken")
-      @user.send(:generate_authentication_token!)
+      @user.generate_authentication_token!
       expect(@user.auth_token).not_to eq existing_user.auth_token
     end
   end

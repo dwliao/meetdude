@@ -13,13 +13,13 @@ Rails.application.routes.draw do
               constraints: ApiConstraints.new(version: 1, default: true) do
       resources :users, only: [:show, :create, :update, :destroy]
       resources :sessions, only: [:create, :destroy]
+      resources :notifications, only: [:index, :show]
     end
   end
 
   root 'pages#index'
 
   get 'notifications' => 'notifications#index'
-  get 'notification/:id' => 'notifications#show'
   post 'notification/:id/link_through' => 'notifications#link_through', as: :link_through
 
   get ':id' => 'users#show'

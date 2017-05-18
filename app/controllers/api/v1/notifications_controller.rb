@@ -1,26 +1,15 @@
-class NotificationsController < ApplicationController
-  before_action :authenticate_user!
+class Api::V1::NotificationsController < ApplicationController
+  before_action :authenticate_with_token!
+  respond_to :json
 
   def index
-    @notifications = current_user.notifications
-    respond_to do |format|
-      format.json { render json: @notifications }
-    end
+    respond_with current_user.notifications
   end
 
   def show
-    @notification = Notification.find_by(params[:id])
-    respond_to do |format|
-      format.json { render :json => { post: @notification.post, name: @notification.user.name, created_at: @notification.created_at }.to_json }
-    end
-  end
-
-  def link_through
-    @notification = Notification.find_by(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @notification.have_read
-    respond_to do |format|
-      format.json { render json: @notification}
-    end
+    respond_with @notification
   end
 
 end

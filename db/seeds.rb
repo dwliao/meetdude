@@ -28,7 +28,7 @@ user_number.times do
     user.posts.create(
       title: Faker::Hipster.sentence,
       description: Faker::Hipster.paragraph,
-      target_id: Random.new.rand(user_number + 1) + 1,
+      target_id: Random.new.rand(user.id) + 1,
       created_at: date,
       updated_at: date)
   end

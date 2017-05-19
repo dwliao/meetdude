@@ -1,13 +1,25 @@
+require 'api_constraints'
+
 Rails.application.routes.draw do
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+
+  namespace :api, defaults: { format: :json },
+                              constraints: { subdomain: 'api' }, path: '/' do
+    scope module: :v1,
+              constraints: ApiConstraints.new(version: 1, default: true) do
+      resources :users, only: [:show, :create, :update, :destroy]
+      resources :sessions, only: [:create, :destroy]
+      resources :notifications, only: [:index, :show]
+    end
+  end
+
   root 'pages#index'
 
   get 'notifications' => 'notifications#index'
-  get 'notification/:id' => 'notifications#show'
   post 'notification/:id/link_through' => 'notifications#link_through', as: :link_through
 
   get ':id' => 'users#show'

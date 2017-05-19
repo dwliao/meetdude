@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe User, :type => :model do
+
   it "should be create" do
     user = User.create(
       email: 'user@mail.com',
@@ -86,5 +87,25 @@ RSpec.describe User, :type => :model do
     expect(post2.target).not_to eq(user2)
     expect(post3.target).to eq(user1)
     expect(post3.target).not_to eq(user2)
+  end
+
+  it { should respond_to(:auth_token) }
+
+  describe "#generate_authentication_token!" do
+
+    before { @user = FactoryGirl.create :user }
+    subject { @user }
+
+    it "generates a unique token" do
+      allow(Devise).to receive(:friendly_token).and_return("uniquetoken")
+      @user.generate_authentication_token!
+      expect(@user.auth_token).to eq "uniquetoken"
+    end
+
+    it "generates another token when one already has been taken" do
+      existing_user = FactoryGirl.create(:user, auth_token: "uniquetoken")
+      @user.generate_authentication_token!
+      expect(@user.auth_token).not_to eq existing_user.auth_token
+    end
   end
 end

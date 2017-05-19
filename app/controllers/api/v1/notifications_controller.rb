@@ -1,15 +1,14 @@
 class Api::V1::NotificationsController < ApplicationController
   before_action :authenticate_with_token!
-  respond_to :json
 
   def index
-    respond_with current_user.notifications
+    @notifications = current_user.notifications
+    render json: serialize_as_json(@notifications), status: 200
   end
 
   def show
     @notification = current_user.notifications.find(params[:id])
     @notification.have_read
-    respond_with @notification
+    render json: serialize_as_json(@notification), status: 200
   end
-
 end

@@ -11,6 +11,12 @@ class ApplicationController < ActionController::Base
     "/" + current_user.id.to_s
   end
 
+  def serialize_as_json(notification)
+    notification.as_json(include: { user: { only: [:email, :name] },
+                                    notified_by: { only: :name },
+                                    post: { only: :description } })
+  end
+
   protected
 
   def configure_permitted_parameters

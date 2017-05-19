@@ -48,6 +48,8 @@ group :development, :test do
   gem 'spring'
 
   gem 'factory_girl_rails'
+
+  gem "awesome_rails_console"
 end
 
 group :test do

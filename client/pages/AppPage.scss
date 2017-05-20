@@ -1,0 +1,26 @@
+.appPage {
+  padding: 0 24px 24px;
+}
+
+.headerTitle {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerTitleContent {
+  display: inline-flex;
+  align-items: center;
+}
+
+.forwardIcon {
+  padding: 0 5px;
+}
+
+.deleteIcon {
+  cursor: pointer;
+  &:hover {
+    color: rgb(0, 188, 212);
+  }
+}

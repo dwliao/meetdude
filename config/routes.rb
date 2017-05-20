@@ -1,7 +1,6 @@
 require 'api_constraints'
 
 Rails.application.routes.draw do
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -27,8 +26,8 @@ Rails.application.routes.draw do
   end
 
   root 'pages#index'
+  get '/*path' => 'pages#index'
 
-  get ':id' => 'users#show'
   post 'searchUsers' => 'users#search_users'
   post 'appendPosts' => 'posts#append_posts'
   post 'createPost' => 'posts#create'

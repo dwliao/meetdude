@@ -69,7 +69,9 @@ RSpec.describe Api::V1::UsersController do
       before(:each) do
         patch :update, { id: @user.id,
                          user: { email: "newmail@example.com",
-                                 name: "John" } }
+                                 name: "John",
+                                 password: "12345678",
+                                 password_confirmation: "12345678" } }
       end
 
       it "renders the json representation for the updated user" do

@@ -16,7 +16,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
 
       it "returns the user record corresponding to the given credentials" do
         @user.reload
-        expect(json_response[:auth_token]).to eq @user.auth_token
+        expect(json_response[:auth_token]).to eq @user.reload.auth_token
       end
 
       it { expect(response).to have_http_status 200}

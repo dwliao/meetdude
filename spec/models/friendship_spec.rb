@@ -16,9 +16,9 @@ RSpec.describe Friendship, type: :model do
 
   it { should belong_to(:user) }
 
-  describe "#accepted_friend!" do
+  describe "#accepte_friend!" do
     before(:each) do
-      @friendship1_2.accepted_friend!
+      @friendship1_2.accepte_friend!
     end
     it { expect(@friendship1_2.state).to eq "accepted" }
     it { expect(@friendship1_2.state).not_to eq "pending" }

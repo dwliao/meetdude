@@ -9,10 +9,14 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json }, path: '/' do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-      resources :users, only: [:show, :create, :update, :destroy]
+      resources :users, only: [:show, :create, :update, :destroy] do
+        member do
+          get 'indexFriendships' => 'users#index_friendships'
+        end
+      end
       devise_for :users, only: :sessions
       resources :notifications, only: [:index, :show]
-      resources :friendships, only: [:index, :create]
+      #resources :friendships, only: [:index, :create]
     end
   end
 

@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_with_token!, only: [:update, :destroy]
+  before_action :authenticate_with_token!, only: [:update, :destroy, :index_friendships]
   respond_to :json
 
   def show
@@ -30,6 +30,18 @@ class Api::V1::UsersController < ApplicationController
     user = current_user
     user.destroy
     head 204
+  end
+
+  def index_friendships
+    friend = User.find(params[:id])
+    @friendship = current_user.friendships.find_by(friend_id: friend.id)
+
+    if @friendship.present?
+      render json: @friendship, status: 200
+    else
+      render json: {}, status: 200
+    end
+
   end
 
   private

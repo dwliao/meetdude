@@ -103,7 +103,7 @@ RSpec.describe Api::V1::UsersController do
     end
   end
 
-  describe "DELETE destroy" do
+  describe "DELETE #destroy" do
     before(:each) do
       @user = FactoryGirl.create :user
       api_authorization_header(@user.auth_token)
@@ -111,5 +111,38 @@ RSpec.describe Api::V1::UsersController do
     end
 
     it { expect(response).to have_http_status 204 }
+  end
+
+  describe "GET #relationship" do
+    before(:each) do
+      @current_user = FactoryGirl.create :user
+      @user2 = FactoryGirl.create :user
+      @user3 = FactoryGirl.create :user
+      @friendship = FactoryGirl.create :friendship, user: @current_user, friend_id: @user2.id
+      api_authorization_header @current_user.auth_token
+    end
+
+    context "when current_user to user2 pages" do
+      before do
+        get :index_friendships, id: @user2.id
+      end
+
+      it "returns their relationship records" do
+        relationship_response = json_response
+        expect(relationship_response[:id]).to be_present
+        expect(relationship_response[:friend_id]).to eq @user2.id
+      end
+    end
+
+    context "when current_user to user3 pages" do
+      before do
+        get :index_friendships, id: @user3.id
+      end
+
+      it "returns their relationship records" do
+        relationship_response = json_response
+        expect(relationship_response).not_to be_present
+      end
+    end
   end
 end

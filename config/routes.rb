@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :users, only: [:show, :create, :update, :destroy] do
         member do
-          get 'indexFriendships' => 'users#index_friendships'
+          get 'showFriendship' => 'users#show_friendship'
           post 'createFriendships' => 'users#friend_request'
         end
       end

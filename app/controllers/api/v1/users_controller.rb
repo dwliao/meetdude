@@ -32,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
     head 204
   end
 
-  def index_friendships
+  def show_friendship
     friend = User.find(params[:id])
     @friendship = current_user.friendships.find_by(friend_id: friend.id)
 

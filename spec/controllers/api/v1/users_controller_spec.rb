@@ -113,7 +113,7 @@ RSpec.describe Api::V1::UsersController do
     it { expect(response).to have_http_status 204 }
   end
 
-  describe "GET #friendship" do
+  describe "GET #show_friendship" do
     before(:each) do
       @current_user = FactoryGirl.create :user
       @user2 = FactoryGirl.create :user
@@ -124,24 +124,24 @@ RSpec.describe Api::V1::UsersController do
 
     context "when current_user to user2 pages" do
       before do
-        get :index_friendships, id: @user2.id
+        get :show_friendship, id: @user2.id
       end
 
       it "returns their friendship records" do
-        friendship_response = json_response
-        expect(friendship_response[:id]).to be_present
-        expect(friendship_response[:friend_id]).to eq @user2.id
+        show_friendship_response = json_response
+        expect(show_friendship_response[:id]).to be_present
+        expect(show_friendship_response[:friend_id]).to eq @user2.id
       end
     end
 
     context "when current_user to user3 pages" do
       before do
-        get :index_friendships, id: @user3.id
+        get :show_friendship, id: @user3.id
       end
 
       it "returns their relationship records" do
-        friendship_response = json_response
-        expect(friendship_response).not_to be_present
+        show_friendship_response = json_response
+        expect(show_friendship_response).not_to be_present
       end
     end
   end

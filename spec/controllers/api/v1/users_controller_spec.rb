@@ -113,7 +113,7 @@ RSpec.describe Api::V1::UsersController do
     it { expect(response).to have_http_status 204 }
   end
 
-  describe "GET #relationship" do
+  describe "GET #friendship" do
     before(:each) do
       @current_user = FactoryGirl.create :user
       @user2 = FactoryGirl.create :user
@@ -127,10 +127,10 @@ RSpec.describe Api::V1::UsersController do
         get :index_friendships, id: @user2.id
       end
 
-      it "returns their relationship records" do
-        relationship_response = json_response
-        expect(relationship_response[:id]).to be_present
-        expect(relationship_response[:friend_id]).to eq @user2.id
+      it "returns their friendship records" do
+        friendship_response = json_response
+        expect(friendship_response[:id]).to be_present
+        expect(friendship_response[:friend_id]).to eq @user2.id
       end
     end
 
@@ -140,9 +140,48 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "returns their relationship records" do
-        relationship_response = json_response
-        expect(relationship_response).not_to be_present
+        friendship_response = json_response
+        expect(friendship_response).not_to be_present
       end
+    end
+  end
+
+  describe "POST #friend_request" do
+    before(:each) do
+      @current_user = FactoryGirl.create :user
+      @user2 = FactoryGirl.create :user
+
+      api_authorization_header @current_user.auth_token
+    end
+
+    context "when on the other user's page" do
+      before(:each) do
+        post :friend_request, { id: @user2.id }
+      end
+      it "renders the json records presentation for the friendship record just created" do
+        friend_request_response = json_response
+        expect(friend_request_response[:id]).to be_present
+        expect(friend_request_response[:user_id]).to eq @current_user.id
+        expect(friend_request_response[:friend_id]).to eq @user2.id
+      end
+
+      it { expect(response).to have_http_status 201 }
+    end
+
+    context "when on my own page" do
+      before(:each) do
+        post :friend_request, { id: @current_user.id }
+      end
+      it "renders the error json" do
+        friend_request_response = json_response
+        expect(friend_request_response).to have_key(:errors)
+      end
+      it "renders the json errors on why the request_friend could not be sent" do
+        friend_request_response = json_response
+        expect(friend_request_response[:errors]).to eq "Can't send friend request to yourself"
+      end
+
+      it { expect(response).to have_http_status 422 }
     end
   end
 end

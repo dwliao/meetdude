@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :users, only: [:show, :create, :update, :destroy] do
         member do
           get 'indexFriendships' => 'users#index_friendships'
+          post 'createFriendships' => 'users#friend_request'
         end
       end
       devise_for :users, only: :sessions

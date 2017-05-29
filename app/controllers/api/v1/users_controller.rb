@@ -41,7 +41,18 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: {}, status: 200
     end
+  end
 
+  def friend_request
+    friend = User.find(params[:id])
+    @friendship = current_user.friendships.build(friend_id: friend.id)
+
+    if @friendship.user_id != @friendship.friend_id
+      @friendship.save
+      render json: @friendship, status: 201
+    else
+      render json: { errors: "Can't send friend request to yourself" }, status: 422
+    end
   end
 
   private

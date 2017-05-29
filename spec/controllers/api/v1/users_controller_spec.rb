@@ -184,4 +184,60 @@ RSpec.describe Api::V1::UsersController do
       it { expect(response).to have_http_status 422 }
     end
   end
+
+  describe "GET #index_friendships" do
+    before(:each) do
+      @current_user = FactoryGirl.create :user
+      @user1 = FactoryGirl.create :user
+      @user2 = FactoryGirl.create :user
+      @user3 = FactoryGirl.create :user
+      @user4 = FactoryGirl.create :user
+      @user5 = FactoryGirl.create :user
+      api_authorization_header @current_user.auth_token
+    end
+
+    context "when current_user get all friendships which state are pending" do
+      before(:each) do
+        @friendship1 = FactoryGirl.create :friendship, user: @user1, friend_id: @current_user.id
+        @friendship2 = FactoryGirl.create :friendship, user: @user2, friend_id: @current_user.id
+        @friendship3 = FactoryGirl.create :friendship, user: @user3, friend_id: @current_user.id
+        @friendship4 = FactoryGirl.create :friendship, user: @user4, friend_id: @current_user.id, state: "accept"
+        @friendship5 = FactoryGirl.create :friendship, user: @current_user, friend_id: @user5.id
+        get :index_friendships, id: @current_user.id
+      end
+
+      it "returns 3 records from database" do
+        index_friendships_response = json_response
+        expect(index_friendships_response.length).to eq 3
+      end
+
+      it "returns all records its friend_id are current_user.id and state are pending" do
+        index_friendships_response = json_response
+        index_friendships_response.each do |index_friendship_response|
+          expect(index_friendship_response[:friend_id]).to eq @current_user.id
+          expect(index_friendship_response[:state]).to eq "pending"
+        end
+      end
+
+      it { expect(response).to have_http_status 200 }
+    end
+  end
+
+  describe "PUT/PATCH #update_friendship" do
+    before(:each) do
+      @current_user = FactoryGirl.create :user
+      @user1 = FactoryGirl.create :user
+      @user2 = FactoryGirl.create :user
+
+      api_authorization_header @current_user.auth_token
+    end
+
+    context "when friendship is successfully updated to accept" do
+      before(:each) do
+        @friendship1 = FactoryGirl.create :friendship, user: @user1, friend_id: @current_user.id
+        @friendship2 = FactoryGirl.create :friendship, user: @user2, friend_id: @current_user.id
+        patch :update_friendship
+      end
+    end
+  end
 end

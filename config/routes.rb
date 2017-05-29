@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         member do
           get 'showFriendship' => 'users#show_friendship'
           post 'createFriendships' => 'users#friend_request'
+          get 'indexFriendships' => 'users#index_friendships'
         end
       end
       devise_for :users, only: :sessions

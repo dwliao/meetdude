@@ -4,6 +4,8 @@ class Friendship < ActiveRecord::Base
   validates :user_id, presence: true
   validates :friend_id, presence: true
 
+  scope :pending, -> { where(state: "pending") }
+
   def accepte_friend!
     self.update!(state: "accepted")
   end

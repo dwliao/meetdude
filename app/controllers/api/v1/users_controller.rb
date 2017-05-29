@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_with_token!, only: [:update, :destroy, :index_friendships]
+  before_action :authenticate_with_token!, only: [:update, :destroy, :show_friendship, :friend_request, :index_friendships]
   respond_to :json
 
   def show
@@ -53,6 +53,11 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { errors: "Can't send friend request to yourself" }, status: 422
     end
+  end
+
+  def index_friendships
+    @friendships = Friendship.where(friend_id: current_user.id).pending
+    respond_with @friendships
   end
 
   private

@@ -201,7 +201,7 @@ RSpec.describe Api::V1::UsersController do
         @friendship1 = FactoryGirl.create :friendship, user: @user1, friend_id: @current_user.id
         @friendship2 = FactoryGirl.create :friendship, user: @user2, friend_id: @current_user.id
         @friendship3 = FactoryGirl.create :friendship, user: @user3, friend_id: @current_user.id
-        @friendship4 = FactoryGirl.create :friendship, user: @user4, friend_id: @current_user.id, state: "accept"
+        @friendship4 = FactoryGirl.create :friendship, user: @user4, friend_id: @current_user.id, state: "accepted"
         @friendship5 = FactoryGirl.create :friendship, user: @current_user, friend_id: @user5.id
         get :index_friendships, id: @current_user.id
       end
@@ -226,18 +226,28 @@ RSpec.describe Api::V1::UsersController do
   describe "PUT/PATCH #update_friendship" do
     before(:each) do
       @current_user = FactoryGirl.create :user
-      @user1 = FactoryGirl.create :user
-      @user2 = FactoryGirl.create :user
+      @user = FactoryGirl.create :user
 
       api_authorization_header @current_user.auth_token
     end
 
     context "when friendship is successfully updated to accept" do
       before(:each) do
-        @friendship1 = FactoryGirl.create :friendship, user: @user1, friend_id: @current_user.id
-        @friendship2 = FactoryGirl.create :friendship, user: @user2, friend_id: @current_user.id
-        patch :update_friendship
+        @friendship = FactoryGirl.create :friendship, user: @user, friend_id: @current_user.id
+        put :accept_request, id: @friendship.id
       end
+
+      it "renders the json presentation for the updated" do
+        update_friendship_response = json_response
+        expect(update_friendship_response[:friendship][:state]).to eq "accepted"
+      end
+
+      it "renders the json message" do
+        update_friendship_response = json_response
+        expect(update_friendship_response[:message]).to eq "已成為好友"
+      end
+
+      it { expect(response).to have_http_status 200 }
     end
   end
 end

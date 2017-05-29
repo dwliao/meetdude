@@ -14,6 +14,7 @@ Rails.application.routes.draw do
           get 'showFriendship' => 'users#show_friendship'
           post 'createFriendships' => 'users#friend_request'
           get 'indexFriendships' => 'users#index_friendships'
+          put 'acceptRequest' => 'users#accept_request'
         end
       end
       devise_for :users, only: :sessions

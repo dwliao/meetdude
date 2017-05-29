@@ -6,7 +6,7 @@ class Friendship < ActiveRecord::Base
 
   scope :pending, -> { where(state: "pending") }
 
-  def accepte_friend!
+  def be_friend!
     self.update!(state: "accepted")
   end
 end

@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_with_token!, only: [:update, :destroy, :show_friendship, :friend_request, :index_friendships]
+  before_action :authenticate_with_token!, only: [:update, :destroy,
+    :show_friendship, :friend_request, :index_friendships, :accept_request]
   respond_to :json
 
   def show
@@ -58,6 +59,12 @@ class Api::V1::UsersController < ApplicationController
   def index_friendships
     @friendships = Friendship.where(friend_id: current_user.id).pending
     respond_with @friendships
+  end
+
+  def accept_request
+    @friendship = Friendship.find(params[:id])
+    @friendship.be_friend!
+    render json: { friendship: @friendship, message: "已成為好友"}, status: 200
   end
 
   private

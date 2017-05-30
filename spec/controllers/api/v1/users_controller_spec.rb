@@ -250,4 +250,17 @@ RSpec.describe Api::V1::UsersController do
       it { expect(response).to have_http_status 200 }
     end
   end
+
+  describe "DELETE #decline_request" do
+    before(:each) do
+      @current_user = FactoryGirl.create :user
+      @user = FactoryGirl.create :user
+      @friendship = FactoryGirl.create :friendship, user: @user, friend_id: @current_user.id
+
+      api_authorization_header @current_user.auth_token
+      delete :decline_request, id: @friendship.id
+    end
+
+    it { expect(response).to have_http_status 204 }
+  end
 end

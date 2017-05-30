@@ -14,6 +14,7 @@ Rails.application.routes.draw do
           post 'createFriendships' => 'users#friend_request', on: :member
           get 'indexFriendships' => 'users#index_friendships', on: :collection
           patch 'acceptRequest' => 'users#accept_request', on: :collection
+          delete 'declineRequest' => 'users#decline_request', on: :collection
       end
       devise_for :users, only: :sessions
       resources :notifications, only: [:index, :show]

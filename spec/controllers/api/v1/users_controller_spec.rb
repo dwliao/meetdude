@@ -203,7 +203,7 @@ RSpec.describe Api::V1::UsersController do
         @friendship3 = FactoryGirl.create :friendship, user: @user3, friend_id: @current_user.id
         @friendship4 = FactoryGirl.create :friendship, user: @user4, friend_id: @current_user.id, state: "accepted"
         @friendship5 = FactoryGirl.create :friendship, user: @current_user, friend_id: @user5.id
-        get :index_friendships, id: @current_user.id
+        get :index_friendships
       end
 
       it "returns 3 records from database" do
@@ -234,7 +234,7 @@ RSpec.describe Api::V1::UsersController do
     context "when friendship is successfully updated to accept" do
       before(:each) do
         @friendship = FactoryGirl.create :friendship, user: @user, friend_id: @current_user.id
-        put :accept_request, id: @friendship.id
+        patch :accept_request, id: @friendship.id
       end
 
       it "renders the json presentation for the updated" do

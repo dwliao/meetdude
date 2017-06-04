@@ -62,6 +62,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def accept_request
+    friend = User.find(params[:id])
     @friendship = Friendship.find(params[:id])
     @friendship.be_friend!
     render json: { friendship: @friendship, message: "已成為好友"}, status: 200

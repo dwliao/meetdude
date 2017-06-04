@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
 
   has_many :notifications, dependent: :destroy
 
-  scope :recent, -> { order(updated_at: :DESC) }
+  scope :recent, -> { order("updated_at DESC") }
 
   def self.which_related_to(user_id, search_type, start_search_time, is_forward, limit_number)
     time = start_search_time.nil? ? Time.now : Time.at(start_search_time.to_i)

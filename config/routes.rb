@@ -9,16 +9,16 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json }, path: '/' do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-      resources :users, only: [:show, :create, :update, :destroy] do
-          get 'showFriendship' => 'users#show_friendship', on: :member
-          post 'createFriendships' => 'users#friend_request', on: :member
-          get 'indexFriendships' => 'users#index_friendships', on: :collection
-          patch 'acceptRequest' => 'users#accept_request', on: :collection
-          delete 'declineRequest' => 'users#decline_request', on: :collection
-      end
+      resources :users, only: [:show, :create, :update, :destroy]
       devise_for :users, only: :sessions
       resources :notifications, only: [:index, :show]
+
       #resources :friendships, only: [:index, :create]
+      get 'showFriendship' => 'friendships#show_friendship'
+      post 'createFriendships' => 'friendships#friend_request'
+      get 'indexFriendships' => 'friendships#index_friendships'
+      patch 'acceptRequest' => 'friendships#accept_request'
+      delete 'declineRequest' => 'friendships#decline_request'
     end
   end
 

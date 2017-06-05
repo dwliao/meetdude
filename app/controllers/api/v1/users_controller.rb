@@ -1,6 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_with_token!, only: [:update, :destroy,
-    :show_friendship, :friend_request, :index_friendships, :accept_request, :decline_request]
+  before_action :authenticate_with_token!, only: [:update, :destroy]
   respond_to :json
 
   def show
@@ -32,48 +31,7 @@ class Api::V1::UsersController < ApplicationController
     user.destroy
     head 204
   end
-
-  def show_friendship
-    friend = User.find(params[:id])
-    @friendship = current_user.friendships.find_by(friend_id: friend.id)
-
-    if @friendship.present?
-      render json: @friendship, status: 200
-    else
-      render json: {}, status: 200
-    end
-  end
-
-  def friend_request
-    friend = User.find(params[:id])
-    @friendship = current_user.friendships.build(friend_id: friend.id)
-
-    if @friendship.user_id != @friendship.friend_id
-      @friendship.save
-      render json: @friendship, status: 201
-    else
-      render json: { errors: "Can't send friend request to yourself" }, status: 422
-    end
-  end
-
-  def index_friendships
-    @friendships = Friendship.where(friend_id: current_user.id).pending
-    respond_with @friendships
-  end
-
-  def accept_request
-    friend = User.find(params[:id])
-    @friendship = Friendship.find(params[:id])
-    @friendship.be_friend!
-    render json: { friendship: @friendship, message: "已成為好友"}, status: 200
-  end
-
-  def decline_request
-    friendship = Friendship.find(params[:id])
-    friendship.destroy
-    head 204
-  end
-
+  
   private
 
   def user_params

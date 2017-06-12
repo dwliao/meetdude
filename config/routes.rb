@@ -19,6 +19,10 @@ Rails.application.routes.draw do
       get 'indexFriendships' => 'friendships#index_friendships'
       patch 'acceptRequest' => 'friendships#accept_request'
       delete 'declineRequest' => 'friendships#decline_request'
+
+      post 'createPost', to: 'posts#create'
+      delete 'deletePost', to: 'posts#destroy'
+      get 'getPost', to: 'posts#index'
     end
   end
 

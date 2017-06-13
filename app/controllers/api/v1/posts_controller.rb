@@ -22,11 +22,23 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def index
-    user = User.find(params[:id])
+    limit_number = 15
+    @user = User.find(params[:id])
     page = params[:page].nil? ? 0 : params[:page]
-    get_user_post = Post.where(target_id: user.id).recent
-    post = get_user_post.limit(15).offset(page.to_i * 15)
-    render json: serialize_json_for(post), status: 200
+    get_user_post = Post.where(target_id: @user.id).recent
+    @final_page_number = get_user_post.length / limit_number
+    @posts = get_user_post.limit(limit_number).offset(page.to_i * limit_number)
+
+    if page.to_i >= 0 && page.to_i < @final_page_number
+      render json: { data: serialize_json_for(@posts),
+                     final_page_number: @final_page_number}, status: 200
+      elsif page.to_i == @final_page_number
+        render json: { data: serialize_json_for(@posts),
+                       final_page_number: @final_page_number,
+                       message: "This is the final page" }, status: 200
+    else
+      render json: { message: "No data" }, status: 422
+    end
   end
 
   private
@@ -36,7 +48,7 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def serialize_json_for(post)
-    post.to_json(include: { target: { only: :name },
+    post.as_json(include: { target: { only: :name },
                             user: { only: :name } })
   end
 end

@@ -89,7 +89,7 @@ RSpec.describe Api::V1::PostsController, type: :controller do
       @post2 = FactoryGirl.create :post, user: @user1, target_id: @user2.id
       @post3 = FactoryGirl.create :post, user: @user2, target_id: @user1.id
     end
-    context "when current_user on his own page" do
+    context "when on current_user page" do
       before do
         api_authorization_header @current_user.auth_token
         get :index, { id: @current_user.id }
@@ -97,21 +97,31 @@ RSpec.describe Api::V1::PostsController, type: :controller do
 
       it "renders 15 records from the database" do
         posts_response = json_response
-        expect(posts_response.length).to eq 15
+        expect(posts_response[:data].length).to eq 15
       end
 
       it "renders json records" do
         posts_response = json_response
-        posts_response.each do |post_response|
+        posts_response[:data].each do |post_response|
           expect(post_response[:target_id]).to eq @current_user.id
           expect(post_response[:target][:name]).to eq @current_user.name
         end
       end
 
+      it "renders json final_page_number" do
+        posts_response = json_response
+        expect(posts_response[:final_page_number]).to eq 1
+      end
+
+      it "renders json message nil" do
+        posts_response = json_response
+        expect(posts_response[:message]).to eq nil
+      end
+
       it { expect(response).to have_http_status 200 }
     end
 
-    context "when current_user on his own page next page" do
+    context "when current_user on his own next page" do
       before do
         api_authorization_header @current_user.auth_token
         get :index, { id: @current_user.id, page: 1 }
@@ -119,7 +129,43 @@ RSpec.describe Api::V1::PostsController, type: :controller do
 
       it "renders 5 records from the database" do
         posts_response = json_response
-        expect(posts_response.length).to eq 5
+        expect(posts_response[:data].length).to eq 5
+      end
+
+      it "renders json message this is the final page" do
+        posts_response = json_response
+        expect(posts_response[:message]).to eq "This is the final page"
+      end
+    end
+
+    context "when params[:page] is greater than final_page_number" do
+      before do
+        api_authorization_header @current_user.auth_token
+        get :index, { id: @current_user.id, page: 2 }
+      end
+
+      it "renders a json message no data" do
+        post_response = json_response
+        expect(post_response[:message]).to eq "No data"
+      end
+
+      it { expect(response).to have_http_status 422 }
+    end
+
+    context "when on user1 page" do
+      before do
+        api_authorization_header @current_user.auth_token
+        get :index, { id: @user1.id }
+      end
+
+      it "renders 2 records from database" do
+        posts_response = json_response
+        expect(json_response[:data].length).to eq 2
+      end
+
+      it "renders a json message this is the final page" do
+        posts_response = json_response
+        expect(json_response[:message]).to eq "This is the final page"
       end
     end
   end

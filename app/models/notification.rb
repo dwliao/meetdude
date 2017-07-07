@@ -5,7 +5,7 @@ class Notification < ActiveRecord::Base
 
   scope :notify_post,           -> { where(notice_type: "receive_post") }
   scope :notify_friend_request, -> { where(notice_type: "receive_friend") }
-
+  
   def read?
     is_read
   end

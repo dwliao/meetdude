@@ -9,23 +9,41 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
 
       @user = FactoryGirl.create :user
       @post = FactoryGirl.create :post
-      4.times { FactoryGirl.create :notification, user: current_user, post: @post, notified_by: @user, notice_type: "receive_post" }
-      get :index
+      @limit_number = 8
+      12.times { FactoryGirl.create :notification, user: current_user, post: @post, notified_by: @user, notice_type: "receive_post" }
     end
 
-    it "returns to 4 record from the database" do
-      notifications_response = json_response
-      expect(notifications_response.length).to eq 4
-    end
-
-    it "returns the user name who sent the post into each notification" do
-      notifications_response = json_response
-      notifications_response.each do |notification_response|
-        expect(notification_response[:notified_by][:name]).to eq @user.name
+    context "when do not send params[:page]" do
+      before do
+        get :index
       end
+
+      it "renders to #{@limit_number} records from the database" do
+        notifications_response = json_response
+        expect(notifications_response[:notifications].length).to eq @limit_number
+        expect(notifications_response[:final_page_number]).to eq (12 / @limit_number)
+      end
+
+      it { expect(response).to have_http_status 200 }
     end
 
-    it { expect(response).to have_http_status 200 }
+    context "when send params[:page] and is final page" do
+      before do
+        get :index, page: 1
+      end
+
+      it "renders to 4 records from the database" do
+        notifications_response = json_response
+        expect(notifications_response[:notifications].length).to eq (12 % @limit_number)
+      end
+
+      it "shows a message for the final page" do
+        notifications_response = json_response
+        expect(notifications_response[:message]).to eq "This is the final page"
+      end
+
+      it { expect(response).to have_http_status 200 }
+    end
   end
 
   describe "GET #show" do
